@@ -62,5 +62,5 @@ class SubtitlesCameraExtension(ScryptedDeviceBase):
         self.stt_engine.stop()
         print(f"Stopped transcription for {self.nativeId}")
 
-def create_device(nativeId):
+def create_scrypted_plugin(nativeId=None):
     return SubtitlesPlugin(nativeId)
