@@ -1,5 +1,5 @@
 {
-    "name": "scrypted-subtitles",
+    "name": "@damustermann/scrypted-subtitles",
     "version": "0.0.1",
     "scrypted": {
         "runtime": "python"

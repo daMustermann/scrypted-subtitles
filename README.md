@@ -23,12 +23,20 @@ A Scrypted NVR plugin that provides **real-time subtitles** and **searchable tra
     ```bash
     cd ~/.scrypted/volume/plugins
     ```
-3.  **Download the Plugin**:
+3.  **Create Scope Directory & Clone**:
+    It is best practice to use a scope folder (like other plugins).
     ```bash
-    git clone https://github.com/daMustermann/scrypted-subtitles.git
+    mkdir -p @damustermann
+    cd @damustermann
+    git clone https://github.com/daMustermann/scrypted-subtitles.git scrypted-subtitles
+    cd scrypted-subtitles
     ```
 4.  **Install Dependencies**:
-    The plugin requires a few Python packages. Scrypted should handle `requirements.txt` automatically, but you can install them manually if needed:
+    First, ensure `pip` is installed (it is often missing in the LXC):
+    ```bash
+    apt-get update && apt-get install -y python3-pip
+    ```
+    Then install the required packages:
     ```bash
     pip install scrypted-sdk sherpa-onnx numpy aiohttp
     ```
@@ -65,6 +73,30 @@ A Scrypted NVR plugin that provides **real-time subtitles** and **searchable tra
 - Scrypted NVR
 - Python 3.9+
 - Intel N100 or better recommended (runs on Raspberry Pi 4 with lighter models).
+
+## Troubleshooting
+
+### Plugin Not Showing Up?
+If the plugin does not appear in the Scrypted Plugins list after restarting:
+
+1.  **Check Directory**: Ensure you cloned the repo into the correct `plugins` folder.
+    ```bash
+    ls -l ~/.scrypted/volume/plugins/scrypted-subtitles
+    ```
+    You should see `package.json` and `plugin.py` directly in this folder.
+
+2.  **Check Logs**: View the Scrypted logs to see if there were errors loading the plugin.
+    ```bash
+    # In the LXC
+    journalctl -u scrypted -f
+    ```
+    Look for "scrypted-subtitles" or Python syntax errors.
+
+3.  **Manual Reload**: Sometimes Scrypted needs a hard refresh.
+    - Restart the service: `systemctl restart scrypted`
+    - Refresh your browser cache (Ctrl+Shift+R).
+
+4.  **Permissions**: Ensure the files are owned by the user running Scrypted (usually root in LXC, but check if running as another user).
 
 ## License
 
