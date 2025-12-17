@@ -1,14 +1,23 @@
-import scrypted_sdk
-from scrypted_sdk import ScryptedDeviceBase, DeviceProvider, ScryptedDeviceType, Setting, ScryptedInterface, ScryptedMimeTypes
-from stt_engine import STTEngine
-from database import SubtitleDatabase
-from http_server import HttpServer
-import asyncio
-import os
-import time
+import sys
+print("DEBUG: Loading scrypted-subtitles main.py", file=sys.stderr)
+
+try:
+    import scrypted_sdk
+    from scrypted_sdk import ScryptedDeviceBase, DeviceProvider, ScryptedDeviceType, Setting, ScryptedInterface, ScryptedMimeTypes
+    from stt_engine import STTEngine
+    from database import SubtitleDatabase
+    from http_server import HttpServer
+    import asyncio
+    import os
+    import time
+    print("DEBUG: Imports successful", file=sys.stderr)
+except Exception as e:
+    print(f"DEBUG: Import failed: {e}", file=sys.stderr)
+    raise
 
 class SubtitlesPlugin(ScryptedDeviceBase, DeviceProvider):
     def __init__(self, nativeId=None):
+        print(f"DEBUG: SubtitlesPlugin init for {nativeId}", file=sys.stderr)
         super().__init__(nativeId=nativeId)
         self.db = SubtitleDatabase(os.path.join(os.path.dirname(__file__), 'subtitles.db'))
         self.db.init_db()
