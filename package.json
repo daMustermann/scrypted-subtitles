@@ -1,0 +1,13 @@
+{
+    "name": "scrypted-subtitles",
+    "version": "0.0.1",
+    "scrypted": {
+        "runtime": "python"
+    },
+    "keywords": [
+        "scrypted",
+        "plugin",
+        "nvr",
+        "subtitles"
+    ]
+}

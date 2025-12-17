@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrypted Subtitles Search</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background: #222; color: #eee; }
+        input { width: 100%; padding: 10px; font-size: 16px; margin-bottom: 20px; background: #333; color: #fff; border: 1px solid #444; }
+        .result { background: #333; padding: 10px; margin-bottom: 5px; cursor: pointer; border-radius: 4px; }
+        .result:hover { background: #444; }
+        .timestamp { color: #888; font-size: 0.8em; margin-right: 10px; }
+        video { width: 100%; margin-bottom: 20px; background: #000; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+<body>
+    <h1>Subtitle Search</h1>
+    
+    <!-- Video Player -->
+    <video id="video" controls></video>
+    
+    <!-- Search -->
+    <input type="text" id="search" placeholder="Search transcripts..." onkeyup="search(this.value)">
+    
+    <!-- Results -->
+    <div id="results"></div>
+
+    <script>
+        const video = document.getElementById('video');
+        let hls;
+
+        // Initialize HLS - Replace with actual stream URL logic
+        // In a real plugin, we'd get the stream URL dynamically or hardcode for testing
+        // For this demo, we'll assume a placeholder or require user input
+        const streamUrl = "/endpoint/stream.m3u8"; // This needs to be dynamic in real app
+
+        if (Hls.isSupported()) {
+            hls = new Hls();
+            // hls.loadSource(streamUrl); // Load on demand
+            hls.attachMedia(video);
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = streamUrl;
+        }
+
+        async function search(query) {
+            if (query.length < 2) {
+                document.getElementById('results').innerHTML = '';
+                return;
+            }
+            
+            const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+            const data = await res.json();
+            
+            const html = data.map(item => `
+                <div class="result" onclick="playAt(${item.timestamp})">
+                    <span class="timestamp">${new Date(item.timestamp * 1000).toLocaleString()}</span>
+                    <span class="text">${item.text}</span>
+                </div>
+            `).join('');
+            
+            document.getElementById('results').innerHTML = html;
+        }
+
+        function playAt(timestamp) {
+            // Logic to seek video. 
+            // Note: HLS streams might not have the full history available unless it's a recording stream.
+            // For NVR, we usually seek in a recording.
+            // This is a simplified demo.
+            video.currentTime = timestamp; 
+            video.play();
+        }
+    </script>
+</body>
+</html>

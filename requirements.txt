@@ -1,0 +1,4 @@
+scrypted-sdk
+sherpa-onnx
+numpy
+aiohttp
