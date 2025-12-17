@@ -2,7 +2,11 @@
     "name": "@damustermann/scrypted-subtitles",
     "version": "0.0.1",
     "scrypted": {
-        "runtime": "python"
+        "runtime": "python",
+        "type": "DeviceProvider",
+        "interfaces": [
+            "DeviceProvider"
+        ]
     },
     "keywords": [
         "scrypted",
